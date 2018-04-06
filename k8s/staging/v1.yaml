@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: face-tome-v1
+  namespace: default
+  labels:
+    env: staging
+    app: face-tome
+    category: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: face-tome
+      env: staging
+      component: web
+      category: default
+  template:
+    metadata:
+      labels:
+        app: face-tome
+        env: staging
+        component: web
+        category: default
+    spec:
+      serviceAccountName: face-tome-staging
+      containers:
+      - name: face-tome
+        image: us.gcr.io/everquote-container-registry/face-tome:latest
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 1
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          env:
+          - name: FT_APP_ENVIRONMENT
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['env']
+          - name: FT_REST_PORT
+            value: "8080"
+          - name: FT_GRPC_PORT
+            value: "8081"
+          - name: FT_LOG_LEVEL
+            value: "DebugLevel"
