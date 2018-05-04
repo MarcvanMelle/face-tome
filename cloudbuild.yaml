@@ -1,0 +1,17 @@
+steps:
+- name: 'docker/compose:1.20.1'
+  id: 'Run tests'
+  args: ['run', 'test', 'go', 'test', './...', '-v']
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'Build if branch is master or develop'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      [[ "$BRANCH_NAME" =~ master|develop ]] && \
+      docker build -t us.gcr.io/everquote-container-registry/face-tome . && \
+      docker tag us.gcr.io/everquote-container-registry/face-tome:latest us.gcr.io/everquote-container-registry/face-tome:$SHORT_SHA && \
+      echo "Pushing images to GCR…" && \
+      docker push us.gcr.io/everquote-container-registry/face-tome
+      [[ ! "$BRANCH_NAME" =~ master|develop ]] && echo "Did not push images to GCR; not on master or develop."
+      true

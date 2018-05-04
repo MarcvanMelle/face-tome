@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: face-tome-staging
-  namespace: product-staging
+  name: face-tome-prod
+  namespace: product-prod
   labels:
     app: face-tome
-    env: staging
+    env: prod
     category: product
 spec:
   type: ClusterIP
@@ -20,20 +20,20 @@ spec:
     targetPort: 8081
   selector:
     app: face-tome
-    env: staging
+    env: prod
     component: web
     category: product
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: face-tome-staging
-  namespace: product-staging
+  name: face-tome-prod
+  namespace: product-prod
 spec:
   podSelector:
     matchLabels:
       app: face-tome
-      env: staging
+      env: prod
       component: web
       category: product
   policyTypes:
@@ -51,13 +51,13 @@ spec:
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: face-tome-staging
-  namespace: product-staging
+  name: face-tome-prod
+  namespace: product-prod
 spec:
   maxUnavailable: 25%
   selector:
     matchLabels:
       app: face-tome
-      env: staging
+      env: prod
       component: web
       category: product
