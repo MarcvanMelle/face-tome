@@ -1,29 +1,29 @@
-apiVersion: apps/v1
+apiVersion: app/v1
 kind: Deployment
 metadata:
-  name: face-tome-staging
-  namespace: product-staging
+  name: face-tome-prod
+  namespace: product-prod
   labels:
     app: face-tome
-    env: staging
+    env: prod
     category: product
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: face-tome
-      env: staging
+      env: prod
       component: web
       category: product
   template:
     metadata:
       labels:
         app: face-tome
-        env: staging
+        env: prod
         component: web
         category: product
     spec:
-      serviceAccountName: face-tome-staging
+      serviceAccountName: face-tome-prod
       containers:
       - name: face-tome
         image: us.gcr.io/everquote-container-registry/face-tome:latest
