@@ -9,4 +9,4 @@ COPY --from=builder /etc/ssl /etc/ssl
 COPY --from=builder /go/src/github.com/MarcvanMelle/face-tome/app .
 USER 10001
 ENTRYPOINT [ "./app" ]
-EXPOSE 8080
+EXPOSE 8080 8081
