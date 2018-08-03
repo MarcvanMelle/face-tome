@@ -11,12 +11,50 @@ service FaceTome {
 }
 
 message GetNPCRequest {
-  string npc_uuid = 1;
+  Gender gender = 1;
+  RealLanguage language = 2;
 }
 
 message GetNPCResponse {
   NPC npc_data = 1;
 }
+
+enum Gender {
+  GEN_UNKNOWN = 0;
+  GEN_ADNROGYNOUS = 1;
+  GEN_FEMALE = 2;
+  GEN_MALE = 3;
+  GEN_TRANSFEMALE = 4;
+  GEN_TRANSMALE = 5;
+  GEN_UNGENDERED = 6;
+}
+
+enum RealLanguage {
+  LANG_UNKNOWN = 0;
+  LANG_AF = 1;
+  LANG_AR = 2;
+  LANG_CS = 3;
+  LANG_DE = 4;
+  LANG_EL = 5;
+  LANG_EN = 6;
+  LANG_ES = 7;
+  LANG_FI = 8;
+  LANG_FR = 9;
+  LANG_GA = 10;
+  LANG_HE = 11;
+  LANG_HI = 12;
+  LANG_IT = 13;
+  LANG_JA = 14;
+  LANG_KO = 15;
+  LANG_LA = 16;
+  LANG_PL = 17;
+  LANG_RU = 18;
+  LANG_SA = 19;
+  LANG_SV = 20;
+  LANG_VI = 21;
+  LANG_ZH = 22;
+}
+
 
 message NPC {
   string first_name = 1;
@@ -60,15 +98,6 @@ message NPC {
   repeated Skill skill = 10;
   PhysicalTraits physical_traits = 11;
   PsychologicalTraits psychological_traits = 12;
-  enum Gender {
-    GEN_UNKNOWN = 0;
-    GEN_ADNROGYNOUS = 1;
-    GEN_FEMALE = 2;
-    GEN_MALE = 3;
-    GEN_TRANSFEMALE = 4;
-    GEN_TRANSMALE = 5;
-    GEN_UNGENDERED = 6;
-  }
   Gender gender = 13;
 }
 

@@ -6,10 +6,12 @@ import (
 
 // GetNPC returns the fully generated NPC response based on provided protocol buffer parameters
 func GetNPC(request *api.GetNPCRequest) (*api.GetNPCResponse, error) {
+	name := getName(request.GetLanguage(), request.GetGender())
+
 	npcResponse := &api.GetNPCResponse{
 		NpcData: &api.NPC{
-			FirstName: "Dougie",
-			LastName:  "Mooper",
+			FirstName: name[0],
+			LastName:  name[1],
 			Age:       32,
 			Alignment: api.NPC_ALIGN_LG,
 			Speed:     30,
@@ -71,7 +73,7 @@ func GetNPC(request *api.GetNPCRequest) (*api.GetNPCResponse, error) {
 			PsychologicalTraits: &api.PsychologicalTraits{
 				Traits: []string{},
 			},
-			Gender: api.NPC_GEN_MALE,
+			Gender: api.Gender_GEN_MALE,
 		},
 	}
 
