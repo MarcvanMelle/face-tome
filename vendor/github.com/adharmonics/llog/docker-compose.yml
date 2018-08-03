@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  test:
+    image: golang:1.10.3
+    volumes:
+      - .:/go/src/github.com/adharmonics/llog
+    working_dir: /go/src/github.com/adharmonics/llog

@@ -1,0 +1,4 @@
+steps:
+- name: 'docker/compose:1.22.0'
+  id: 'Run tests'
+  args: ['run', 'test', 'go', 'test', '-v', '-race']
