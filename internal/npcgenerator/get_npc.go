@@ -1,24 +1,30 @@
 package npcgenerator
 
 import (
+	"math/rand"
+	"time"
+
 	api "github.com/MarcvanMelle/face-tome/internal/pb/facetomeapi"
 )
 
+var r = rand.New(rand.NewSource(time.Now().UnixNano()))
+
 // GetNPC returns the fully generated NPC response based on provided protocol buffer parameters
 func GetNPC(request *api.GetNPCRequest) (*api.GetNPCResponse, error) {
-	name := getName(request.GetLanguage(), request.GetGender())
+	npcName := getName(request.GetLanguage(), request.GetGender())
+	npcAge := getAge(request)
 
 	npcResponse := &api.GetNPCResponse{
 		NpcData: &api.NPC{
-			FirstName: name[0],
-			LastName:  name[1],
-			Age:       32,
+			FirstName: npcName.firstName,
+			LastName:  npcName.lastName,
+			Age:       npcAge.age,
 			Alignment: api.NPC_ALIGN_LG,
 			Speed:     30,
 			Language:  []api.NPC_Language{api.NPC_LANG_COMMON, api.NPC_LANG_DWARVISH},
 			Class:     []*api.Class{&api.Class{Name: api.Class_CLASSNAME_BARD, Level: api.Class_LEVEL_ELEVEN}},
 			Race: &api.Race{
-				Race: api.Race_RACE_DWARF_MOUNTAIN,
+				Race: npcAge.race,
 				RacialTraits: &api.Race_MountainDwarfTraits{
 					MountainDwarfTraits: &api.MountainDwarfTraits{
 						StatMod: &api.Stats{

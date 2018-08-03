@@ -3,17 +3,22 @@ package npcgenerator
 import (
 	"fmt"
 	"io/ioutil"
-	"math/rand"
 	"path/filepath"
 	"strings"
-	"time"
 
 	api "github.com/MarcvanMelle/face-tome/internal/pb/facetomeapi"
 )
 
-var r = rand.New(rand.NewSource(time.Now().UnixNano()))
+type NpcName struct {
+	firstName  string
+	lastName   string
+	middleName string
+	title      string
+	prefix     string
+	suffix     string
+}
 
-func getName(lang api.RealLanguage, gender api.Gender) []string {
+func getName(lang api.RealLanguage, gender api.Gender) *NpcName {
 	firstName, err := getFirstName(lang, gender)
 	if err != nil {
 		fmt.Println(err)
@@ -24,7 +29,7 @@ func getName(lang api.RealLanguage, gender api.Gender) []string {
 		fmt.Println(err)
 	}
 
-	return []string{firstName, lastName}
+	return &NpcName{firstName: firstName, lastName: lastName}
 }
 
 func getFirstName(lang api.RealLanguage, gender api.Gender) (string, error) {
@@ -76,7 +81,7 @@ func readSampleFiles(lang api.RealLanguage, filenames []string) ([]byte, error) 
 	mappedLang := mapAPILangToISO639[lang]
 
 	for _, filename := range filenames {
-		nameFile := filepath.Join(".", "namedata", mappedLang, fmt.Sprintf("%s_%s", mappedLang, filename))
+		nameFile := filepath.Join("/go/src/github.com/MarcvanMelle/face-tome", "internal", "namedata", mappedLang, fmt.Sprintf("%s_%s", mappedLang, filename))
 		nameData, err := ioutil.ReadFile(nameFile)
 		if err != nil {
 			return nil, err
