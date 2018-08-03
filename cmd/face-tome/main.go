@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"io"
 	"log"
@@ -11,23 +10,12 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/MarcvanMelle/face-tome/internal/npcgenerator"
+	"github.com/MarcvanMelle/face-tome/configs"
 	api "github.com/MarcvanMelle/face-tome/internal/pb/facetomeapi"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
-
-const (
-	grpcPort = ":5501"
-	httpPort = ":5500"
-)
-
-type server struct{}
-
-func (s *server) GetNPC(ctx context.Context, request *api.GetNPCRequest) (*api.GetNPCResponse, error) {
-	return npcgenerator.GetNPC(request)
-}
 
 func main() {
 	errChan := make(chan error)
@@ -48,18 +36,19 @@ func main() {
 }
 
 func serveGRPC(errChan chan error) {
-	grpcListener, err := net.Listen("tcp", grpcPort)
+	grpcAddr := fmt.Sprintf(":%d", configs.Config.GRPCPort)
+	grpcListener, err := net.Listen("tcp", grpcAddr)
 	if err != nil {
-		log.Fatalf("cannot listen to address: %v", err)
+		log.Fatalf("cannot listen to address: %s", err)
 	}
-	log.Printf("grpc listening on port %s", grpcPort)
+	log.Printf("grpc listening on port %d", configs.Config.GRPCPort)
 
 	opts := []grpc.ServerOption{}
 	s := grpc.NewServer(opts...)
-	api.RegisterFaceTomeServer(s, &server{})
+	api.RegisterFaceTomeServer(s, &grpcServer{})
 	reflection.Register(s)
 	if err := s.Serve(grpcListener); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		log.Fatalf("failed to serve: %s", err)
 	}
 }
 
@@ -70,16 +59,17 @@ func serveHTTP(errChan chan error) {
 		io.WriteString(w, "hello, world!\n")
 	})
 
-	httpListener, err := net.Listen("tcp", httpPort)
+	httpAddr := fmt.Sprintf(":%d", configs.Config.RestPost)
+	httpListener, err := net.Listen("tcp", httpAddr)
 	if err != nil {
-		errChan <- fmt.Errorf("cannot listen to address: %v", err)
+		errChan <- fmt.Errorf("cannot listen to address: %s", err)
 		return
 	}
-	log.Printf("http listening on %s", httpPort)
+	log.Printf("http listening on %d", configs.Config.RestPost)
 
 	httpServer := &http.Server{}
 	if err := httpServer.Serve(httpListener); err != nil {
-		errChan <- fmt.Errorf("failed to serve: %v", err)
+		errChan <- fmt.Errorf("failed to serve: %s", err)
 		return
 	}
 }
