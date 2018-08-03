@@ -1,0 +1,335 @@
+// protoc --go_out=plugins=grpc:. face-tome.proto
+
+syntax="proto3";
+
+package facetome;
+
+option go_package = "internal/pb/facetomeapi";
+
+service FaceTome {
+  rpc GetNPC (GetNPCRequest) returns (GetNPCResponse) {}
+}
+
+message GetNPCRequest {
+  string npc_uuid = 1;
+}
+
+message GetNPCResponse {
+  NPC npc_data = 1;
+}
+
+message NPC {
+  string first_name = 1;
+  string last_name = 2;
+  int32 age = 3;
+  enum Alignment {
+    ALIGN_LG = 0;
+    ALIGN_LN = 1;
+    ALIGN_LE = 2;
+    ALIGN_NG = 3;
+    ALIGN_NN = 4;
+    ALIGN_NE = 5;
+    ALIGN_CG = 6;
+    ALIGN_CN = 7;
+    ALIGN_CE = 8;
+  }
+  Alignment alignment = 4;
+  int32 speed = 5;
+  enum Language {
+    LANG_COMMON = 0;
+    LANG_DWARVISH = 1;
+    LANG_ELVISH = 2;
+    LANG_GIANT = 3;
+    LANG_GNOMISH = 4;
+    LANG_GOBLIN = 5;
+    LANG_HALFLING = 6;
+    LANG_ORCISH = 7;
+    LANG_ABYSSAL = 8;
+    LANG_CELESTIAL = 9;
+    LANG_DRACONIC = 10;
+    LANG_DEEP = 11;
+    LANG_INFERNAL = 12;
+    LANG_PRIMORDIAL = 13;
+    LANG_SYLVAN = 14;
+    LANG_UNDERCOMMON = 15;
+  }
+  repeated Language language = 6;
+  repeated Class class = 7;
+  Race race = 8;
+  Stats stats = 9;
+  repeated Skill skill = 10;
+  PhysicalTraits physical_traits = 11;
+  PsychologicalTraits psychological_traits = 12;
+  enum Gender {
+    GEN_UNKNOWN = 0;
+    GEN_ADNROGYNOUS = 1;
+    GEN_FEMALE = 2;
+    GEN_MALE = 3;
+    GEN_TRANSFEMALE = 4;
+    GEN_TRANSMALE = 5;
+    GEN_UNGENDERED = 6;
+  }
+  Gender gender = 13;
+}
+
+message Stats {
+  int32 str = 1;
+  int32 con = 2;
+  int32 dex = 3;
+  int32 int = 4;
+  int32 wis = 5;
+  int32 cha = 6;
+}
+
+message Skill {
+  enum SkillName {
+    SKILL_ATHLETICS = 0;
+    SKILL_ACROBATICS = 1;
+    SKILL_SLEIGHT = 2;
+    SKILL_STEALTH = 3;
+    SKILL_ARCANA = 4;
+    SKILL_HISTORY = 5;
+    SKILL_INVESTIGATION = 6;
+    SKILL_NATURE = 7;
+    SKILL_RELIGION = 8;
+    SKILL_ANIMAL_HANDLING = 9;
+    SKILL_INSIGHT = 10;
+    SKILL_MEDICINE = 11;
+    SKILL_PERCEPTION = 12;
+    SKILL_SURVIVAL = 13;
+    SKILL_DECEPTION = 14;
+    SKILL_INTIMIDATION = 15;
+    SKILL_PERFORMANCE = 16;
+    SKILL_PERSUASION = 17;
+  }
+  SkillName skill_name = 1;
+  bool proficiency = 2;
+  string stat_mod = 3;
+}
+
+message Class {
+  enum ClassName {
+    CLASSNAME_BARBARIAN = 0;
+    CLASSNAME_BARD = 1;
+    CLASSNAME_CLERIC = 2;
+    CLASSNAME_DRUID = 3;
+    CLASSNAME_MONK = 4;
+    CLASSNAME_PALADIN = 5;
+    CLASSNAME_RANGER = 6;
+    CLASSNAME_SORCEROR = 7;
+    CLASSNAME_WARLOCK = 8;
+    CLASSNAME_WARRIOR = 9;
+    CLASSNAME_WIZARD = 10;
+  }
+  ClassName name = 1;
+  enum Level {
+    LEVEL_ONE = 0;
+    LEVEL_TWO = 1;
+    LEVEL_THREE = 2;
+    LEVEL_FOUR = 3;
+    LEVEL_FIVE = 4;
+    LEVEL_SIX = 5;
+    LEVEL_SEVEN = 6;
+    LEVEL_EIGHT = 7;
+    LEVEL_NINE = 8;
+    LEVEL_TEN = 9;
+    LEVEL_ELEVEN = 10;
+    LEVEL_TWELVE = 11;
+    LEVEL_THIRTEEN = 12;
+    LEVEL_FOURTEEN = 13;
+    LEVEL_FIFTEEN = 14;
+    LEVEL_SIXTEEN = 15;
+    LEVEL_SEVENTEEN = 16;
+    LEVEL_EIGHTEEN = 17;
+    LEVEL_NINETEEN = 18;
+    LEVEL_TWENTY = 19;
+  }
+  Level level = 2;
+}
+
+message Race {
+  enum RaceName {
+    RACE_DWARF_HILL = 0;
+    RACE_DWARF_MOUNTAIN = 1;
+    RACE_ELF_HIGH = 2;
+    RACE_ELF_WOOD = 3;
+    RACE_ELF_DROW = 4;
+    RACE_HALFING_LIGHTFOOT = 5;
+    RACE_HALFLING_STOUT = 6;
+    RACE_HUMAN = 7;
+    RACE_DRAGONBORN = 8;
+    RACE_GNOME_FOREST = 9;
+    RACE_GNOME_ROCK = 10;
+    RACE_HALF_ELF = 11;
+    RACE_HALF_ORC = 12;
+    RACE_TIEFLING = 13;
+  }
+  RaceName race = 1;
+  oneof racial_traits {
+    HillDwarfTraits hill_dwarf_traits = 2;
+    MountainDwarfTraits mountain_dwarf_traits = 3;
+    HighElfTraits high_elf_traits = 4;
+    WoodElfTraits wood_elf_traits = 5;
+    DrowElfTraits drow_elf_traits = 6;
+    LightFootHalflingTraits light_foot_halfling_traits = 7;
+    StoutHalflingTraits stout_halfling_traits = 8;
+    HumanTraits human_traits = 9;
+    DragonbornTraits dragonborn_traits = 10;
+    ForestGnomeTraits forest_gnome_traits = 11;
+    RockGnomeTraits rock_gnome_traits = 12;
+    HalfElfTraits half_elf_traits = 13;
+    HalfOrcTraits half_orc_traits = 14;
+    TieflingTraits tiefling_traits = 15;
+  }
+}
+
+message HillDwarfTraits {
+  Stats stat_mod = 1;
+  bool darkvision = 2;
+  bool dwarven_resilience = 3;
+  bool dwarven_combat_training = 4;
+  bool dwarven_tool_proficiency = 5;
+  bool stone_cunning = 6;
+  bool dwarven_toughness = 7;
+}
+message MountainDwarfTraits {
+  Stats stat_mod = 1;
+  bool darkvision = 2;
+  bool dwarven_resilience = 3;
+  bool dwarven_combat_training = 4;
+  bool dwarven_tool_proficiency = 5;
+  bool stone_cunning = 6;
+  bool dwarven_armor_training = 7;
+}
+message HighElfTraits {
+  Stats stat_mod = 1;
+  bool darkvision = 2;
+  bool keen_senses = 3;
+  bool fey_ancestry = 4;
+  bool trance = 5;
+  bool elf_weapon_training = 6;
+  bool cantrip = 7;
+  bool extra_language = 8;
+}
+message WoodElfTraits {
+  Stats stat_mod = 1;
+  bool darkvision = 2;
+  bool keen_senses = 3;
+  bool fey_ancestry = 4;
+  bool trance = 5;
+  bool elf_weapon_training = 6;
+  bool fleet_of_foot = 7;
+  bool mask_of_the_wild = 8;
+}
+message DrowElfTraits {
+  Stats stat_mod = 1;
+  bool darkvision = 2;
+  bool superior_darkvision = 3;
+  bool keen_senses = 4;
+  bool fey_ancestry = 5;
+  bool trance = 6;
+  bool sunlight_sensitive = 7;
+  bool drow_magic = 8;
+  bool drow_weapon_training = 9;
+}
+
+message LightFootHalflingTraits {
+  Stats stat_mod = 1;
+  bool lucky = 2;
+  bool brave = 3;
+  bool halfling_nimble = 4;
+  bool natural_stealth = 5;
+}
+message StoutHalflingTraits {
+  Stats stat_mod = 1;
+  bool lucky = 2;
+  bool brave = 3;
+  bool halfling_nimble = 4;
+  bool stout_resilience = 5;
+}
+message HumanTraits {
+  Stats stat_mod = 1;
+}
+message DragonbornTraits {
+  Stats stat_mod = 1;
+  enum DraconicAncestry {
+    DRAC_ANCS_BLACK = 0;
+    DRAC_ANCS_BLUE = 1;
+    DRAC_ANCS_BRASS = 2;
+    DRAC_ANCS_BRONZE = 3;
+    DRAC_ANCS_COPPER = 4;
+    DRAC_ANCS_GOLD = 5;
+    DRAC_ANCS_GREEN = 6;
+    DRAC_ANCS_RED = 7;
+    DRAC_ANCS_SILVER = 8;
+    DRAC_ANCS_WHITE = 9;
+  }
+  DraconicAncestry draconic_ancestry = 2;
+  bool breath_weapon = 3;
+  bool damage_resistance = 4;
+}
+message ForestGnomeTraits {
+  Stats stat_mod = 1;
+  bool darkvision = 2;
+  bool gnome_cunning = 3;
+  bool natural_illusion = 4;
+  bool speak_with_beasts = 5;
+}
+message RockGnomeTraits {
+  Stats stat_mod = 1;
+  bool darkvision = 2;
+  bool gnome_cunning = 3;
+  bool artifice_lore = 4;
+  bool tinker = 5;
+}
+message HalfElfTraits {
+  Stats stat_mod = 1;
+  bool darkvision = 2;
+  bool fey_ancestry = 3;
+  bool skill_vesatility = 4;
+}
+message HalfOrcTraits {
+  Stats stat_mod = 1;
+  bool darkvision = 2;
+  bool menacing = 3;
+  bool relentless_endure = 4;
+  bool savage_attacks = 5;
+}
+message TieflingTraits {
+  Stats stat_mod = 1;
+  bool darkvision = 2;
+  bool hellish_resistance = 3;
+  bool infernal_legacy = 4;
+}
+
+message PhysicalTraits {
+  int32 height_feet = 1;
+  int32 height_inch = 2;
+  int32 weight = 3;
+  enum SkinTone {
+    SKIN_PALE = 0;
+    SKIN_OLIVE = 1;
+    SKIN_TAN = 2;
+    SKIN_DUSKY = 3;
+    SKIN_DARK = 4;
+    SKIN_UMBER = 5;
+    SKIN_GREEN = 6;
+    SKIN_GREY = 7;
+    SKIN_BLACK_SCALE = 8;
+    SKIN_BLUE_SCALE = 9;
+    SKIN_BRASS_SCALE = 10;
+    SKIN_BRONZE_SCALE = 11;
+    SKIN_COPPER_SCALE = 12;
+    SKIN_GOLD_SCALE = 13;
+    SKIN_GREEN_SCALE = 14;
+    SKIN_RED_SCALE = 15;
+    SKIN_SILVER_SCALE = 16;
+    SKIN_WHITE_SCALE = 17;
+  }
+  SkinTone skin_tone = 4;
+  repeated string traits = 5;
+}
+
+message PsychologicalTraits {
+  repeated string traits = 1;
+}

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: face-tome-staging
+  labels:
+    app: face-tome
+    env: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: face-tome
+      env: staging
+  template:
+    metadata:
+      labels:
+        app: face-tome
+        env: staging
+    spec:
+      containers:
+      - name: face-tome
+        image: localhost:5000/face-tome:latest
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: 500m
+            memory: 100Mi
+          requests:
+            cpu: 500m
+            memory: 100Mi
+        env:
+        - name: FCT_APP_ENVIRONMENT
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['env']

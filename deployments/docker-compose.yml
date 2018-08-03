@@ -1,0 +1,15 @@
+version: "2"
+services:
+  app:
+    image: golang:1.10.2
+    ports:
+      - "5501:5501"
+    volumes:
+      - ./..:/go/src/github.com/MarcvanMelle/face-tome
+    working_dir: /go/src/github.com/MarcvanMelle/face-tome
+    command: ./face-tome
+  test:
+    image: golang:1.10.2
+    volumes:
+      - ./..:/go/src/github.com/MarcvanMelle/face-tome
+    working_dir: /go/src/github.com/MarcvanMelle/face-tome

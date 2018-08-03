@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: face-tome-prod
+  namespace: product-prod
+  labels:
+    app: face-tome
+    env: prod
+    category: product
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+  - name: grpc
+    protocol: TCP
+    port: 81
+    targetPort: 8081
+  selector:
+    app: face-tome
+    env: prod
+    component: web
+    category: product
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: face-tome-prod
+  namespace: product-prod
+spec:
+  podSelector:
+    matchLabels:
+      app: face-tome
+      env: prod
+      component: web
+      category: product
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 8081
+  egress:
+  - {}
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: face-tome-prod
+  namespace: product-prod
+spec:
+  maxUnavailable: 25%
+  selector:
+    matchLabels:
+      app: face-tome
+      env: prod
+      component: web
+      category: product
