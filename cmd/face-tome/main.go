@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"log"
 	"net"
 	"net/http"
@@ -54,9 +53,13 @@ func serveGRPC(errChan chan error) {
 
 func serveHTTP(errChan chan error) {
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
-		// w.WriteHeader(http.StatusOK)
-		// w.Write([]byte("OK"))
-		io.WriteString(w, "hello, world!\n")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
+
+	http.HandleFunc("/healthcheck", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
 	})
 
 	httpAddr := fmt.Sprintf(":%d", configs.Config.RestPost)

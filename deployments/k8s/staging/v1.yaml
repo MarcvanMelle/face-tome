@@ -2,26 +2,31 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: face-tome-staging
+  namespace: product-staging
   labels:
     app: face-tome
     env: staging
+    category: product
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: face-tome
       env: staging
+      category: product
+      component: web
   template:
     metadata:
       labels:
         app: face-tome
         env: staging
+        category: product
+        component: web
     spec:
+      serviceAccountName: face-tome-staging
       containers:
       - name: face-tome
-        image: localhost:5000/face-tome:latest
-        ports:
-        - containerPort: 8080
+        image: face-tome-reg-adh8.fwd.wf/face-tome:latest
         resources:
           limits:
             cpu: 500m
@@ -29,8 +34,26 @@ spec:
           requests:
             cpu: 500m
             memory: 100Mi
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 8080
+          initialDelaySeconds: 1
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 20
         env:
-        - name: FCT_APP_ENVIRONMENT
+        - name: FT_APP_ENVIRONMENT
           valueFrom:
             fieldRef:
               fieldPath: metadata.labels['env']
+        - name: FT_APP_VERSION
+          value: v1_08032018
+        - name: FT_REST_PORT
+          value: "8080"
+        - name: FT_GRPC_PORT
+          value: "8081"

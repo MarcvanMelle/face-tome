@@ -36,8 +36,8 @@ func initDefault() error {
 
 	Config = appConfig{
 		AppVersion: viper.GetString("app_version"),
-		GRPCPort:   viper.GetInt("rest_port"),
-		RestPost:   viper.GetInt("grpc_port"),
+		GRPCPort:   viper.GetInt("grpc_port"),
+		RestPost:   viper.GetInt("rest_port"),
 		LogEnable:  viper.GetBool("log_enable"),
 		LogLevel:   viper.GetString("log_level"),
 	}
