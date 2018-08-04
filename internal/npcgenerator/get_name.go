@@ -9,7 +9,7 @@ import (
 	api "github.com/MarcvanMelle/face-tome/internal/pb/facetomeapi"
 )
 
-type NpcName struct {
+type npcName struct {
 	firstName  string
 	lastName   string
 	middleName string
@@ -18,7 +18,18 @@ type NpcName struct {
 	suffix     string
 }
 
-func getName(lang api.RealLanguage, gender api.Gender) *NpcName {
+func (npc *NpcData) setName() {
+	lang := npc.request.GetLanguage()
+	if lang == api.RealLanguage_LANG_UNKNOWN {
+		lang = api.RealLanguage_LANG_EN
+	}
+
+	gender := npc.request.GetGender()
+	if gender == api.Gender_GEN_UNKNOWN {
+		gender = selectWeightedGender()
+	}
+	npc.npcGender = gender
+
 	firstName, err := getFirstName(lang, gender)
 	if err != nil {
 		fmt.Println(err)
@@ -29,7 +40,10 @@ func getName(lang api.RealLanguage, gender api.Gender) *NpcName {
 		fmt.Println(err)
 	}
 
-	return &NpcName{firstName: firstName, lastName: lastName}
+	npc.npcName = &npcName{
+		firstName: firstName,
+		lastName:  lastName,
+	}
 }
 
 func getFirstName(lang api.RealLanguage, gender api.Gender) (string, error) {
@@ -91,6 +105,28 @@ func readSampleFiles(lang api.RealLanguage, filenames []string) ([]byte, error) 
 	}
 
 	return data, nil
+}
+
+func selectWeightedGender() api.Gender {
+	weightedSelector := r.Intn(99)
+
+	for gender, intRange := range weightedGenders {
+		min := intRange[0]
+		max := intRange[len(intRange)-1]
+		if (weightedSelector > min && weightedSelector < max) || weightedSelector == min || weightedSelector == max {
+			return gender
+		}
+	}
+	return api.Gender_GEN_ADNROGYNOUS
+}
+
+var weightedGenders = map[api.Gender][]int{
+	api.Gender_GEN_ADNROGYNOUS: generateIntRange(70, 79),
+	api.Gender_GEN_FEMALE:      generateIntRange(0, 34),
+	api.Gender_GEN_MALE:        generateIntRange(35, 69),
+	api.Gender_GEN_TRANSFEMALE: generateIntRange(87, 93),
+	api.Gender_GEN_TRANSMALE:   generateIntRange(94, 99),
+	api.Gender_GEN_UNGENDERED:  generateIntRange(80, 86),
 }
 
 var mapAPILangToISO639 = map[api.RealLanguage]string{

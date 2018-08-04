@@ -15,6 +15,9 @@ message GetNPCRequest {
   RealLanguage language = 2;
   AgeGroup relative_age = 3;
   RaceName race = 4;
+  Alignment alignment = 5;
+  ClassName class = 6;
+  Level level = 7;
 }
 
 message GetNPCResponse {
@@ -91,41 +94,86 @@ enum RaceName {
   RACE_TIEFLING = 14;
 }
 
+enum Alignment {
+  ALIGN_UNKNOWN = 0;
+  ALIGN_LG = 1;
+  ALIGN_LN = 2;
+  ALIGN_LE = 3;
+  ALIGN_NG = 4;
+  ALIGN_NN = 5;
+  ALIGN_NE = 6;
+  ALIGN_CG = 7;
+  ALIGN_CN = 8;
+  ALIGN_CE = 9;
+}
+
+enum Language {
+  LANG_CHOOSE_AGAIN = 0;
+  LANG_COMMON = 1;
+  LANG_DWARVISH = 2;
+  LANG_ELVISH = 3;
+  LANG_GIANT = 4;
+  LANG_GNOMISH = 5;
+  LANG_GOBLIN = 6;
+  LANG_HALFLING = 7;
+  LANG_ORCISH = 8;
+  LANG_ABYSSAL = 9;
+  LANG_CELESTIAL = 10;
+  LANG_DRACONIC = 11;
+  LANG_DEEP = 12;
+  LANG_INFERNAL = 13;
+  LANG_PRIMORDIAL = 14;
+  LANG_SYLVAN = 15;
+  LANG_UNDERCOMMON = 16;
+}
+
+enum ClassName {
+  CLASSNAME_UNKNOWN = 0;
+  CLASSNAME_COMMONER = 1;
+  CLASSNAME_BARBARIAN = 2;
+  CLASSNAME_BARD = 3;
+  CLASSNAME_CLERIC = 4;
+  CLASSNAME_DRUID = 5;
+  CLASSNAME_FIGHTER = 6;
+  CLASSNAME_MONK = 7;
+  CLASSNAME_PALADIN = 8;
+  CLASSNAME_RANGER = 9;
+  CLASSNAME_SORCEROR = 10;
+  CLASSNAME_WARLOCK = 11;
+  CLASSNAME_WARRIOR = 12;
+  CLASSNAME_WIZARD = 13;
+}
+
+enum Level {
+  LEVEL_UNKNOWN = 0;
+  LEVEL_ONE = 1;
+  LEVEL_TWO = 2;
+  LEVEL_THREE = 3;
+  LEVEL_FOUR = 4;
+  LEVEL_FIVE = 5;
+  LEVEL_SIX = 6;
+  LEVEL_SEVEN = 7;
+  LEVEL_EIGHT = 8;
+  LEVEL_NINE = 9;
+  LEVEL_TEN = 10;
+  LEVEL_ELEVEN = 11;
+  LEVEL_TWELVE = 12;
+  LEVEL_THIRTEEN = 13;
+  LEVEL_FOURTEEN = 14;
+  LEVEL_FIFTEEN = 15;
+  LEVEL_SIXTEEN = 16;
+  LEVEL_SEVENTEEN = 17;
+  LEVEL_EIGHTEEN = 18;
+  LEVEL_NINETEEN = 19;
+  LEVEL_TWENTY = 20;
+}
+
 message NPC {
   string first_name = 1;
   string last_name = 2;
   int32 age = 3;
-  enum Alignment {
-    ALIGN_LG = 0;
-    ALIGN_LN = 1;
-    ALIGN_LE = 2;
-    ALIGN_NG = 3;
-    ALIGN_NN = 4;
-    ALIGN_NE = 5;
-    ALIGN_CG = 6;
-    ALIGN_CN = 7;
-    ALIGN_CE = 8;
-  }
   Alignment alignment = 4;
   int32 speed = 5;
-  enum Language {
-    LANG_COMMON = 0;
-    LANG_DWARVISH = 1;
-    LANG_ELVISH = 2;
-    LANG_GIANT = 3;
-    LANG_GNOMISH = 4;
-    LANG_GOBLIN = 5;
-    LANG_HALFLING = 6;
-    LANG_ORCISH = 7;
-    LANG_ABYSSAL = 8;
-    LANG_CELESTIAL = 9;
-    LANG_DRACONIC = 10;
-    LANG_DEEP = 11;
-    LANG_INFERNAL = 12;
-    LANG_PRIMORDIAL = 13;
-    LANG_SYLVAN = 14;
-    LANG_UNDERCOMMON = 15;
-  }
   repeated Language language = 6;
   repeated Class class = 7;
   Race race = 8;
@@ -172,42 +220,7 @@ message Skill {
 }
 
 message Class {
-  enum ClassName {
-    CLASSNAME_BARBARIAN = 0;
-    CLASSNAME_BARD = 1;
-    CLASSNAME_CLERIC = 2;
-    CLASSNAME_DRUID = 3;
-    CLASSNAME_MONK = 4;
-    CLASSNAME_PALADIN = 5;
-    CLASSNAME_RANGER = 6;
-    CLASSNAME_SORCEROR = 7;
-    CLASSNAME_WARLOCK = 8;
-    CLASSNAME_WARRIOR = 9;
-    CLASSNAME_WIZARD = 10;
-  }
   ClassName name = 1;
-  enum Level {
-    LEVEL_ONE = 0;
-    LEVEL_TWO = 1;
-    LEVEL_THREE = 2;
-    LEVEL_FOUR = 3;
-    LEVEL_FIVE = 4;
-    LEVEL_SIX = 5;
-    LEVEL_SEVEN = 6;
-    LEVEL_EIGHT = 7;
-    LEVEL_NINE = 8;
-    LEVEL_TEN = 9;
-    LEVEL_ELEVEN = 10;
-    LEVEL_TWELVE = 11;
-    LEVEL_THIRTEEN = 12;
-    LEVEL_FOURTEEN = 13;
-    LEVEL_FIFTEEN = 14;
-    LEVEL_SIXTEEN = 15;
-    LEVEL_SEVENTEEN = 16;
-    LEVEL_EIGHTEEN = 17;
-    LEVEL_NINETEEN = 18;
-    LEVEL_TWENTY = 19;
-  }
   Level level = 2;
 }
 

@@ -2,14 +2,11 @@ package npcgenerator
 
 import api "github.com/MarcvanMelle/face-tome/internal/pb/facetomeapi"
 
-type NpcAge struct {
-	age  int32
-	race api.RaceName
-}
+type npcAge int32
 
-func getAge(request *api.GetNPCRequest) *NpcAge {
-	race := request.GetRace()
-	ageGroup := request.GetRelativeAge()
+func (npc *NpcData) setAge() {
+	race := npc.request.GetRace()
+	ageGroup := npc.request.GetRelativeAge()
 
 	if ageGroup == api.AgeGroup_AGE_UNKNOWN {
 		ageGroup = selectWeightedAge()
@@ -20,10 +17,10 @@ func getAge(request *api.GetNPCRequest) *NpcAge {
 
 	ageGroupMap := selectRacialAgeMap(race)
 	ageRange := ageGroupMap[ageGroup]
+	selectedAge := npcAge(ageRange[r.Intn(len(ageRange))])
 
-	selectedAge := ageRange[r.Intn(len(ageRange))]
-
-	return &NpcAge{age: int32(selectedAge), race: race}
+	npc.npcRace = &npcRace{raceName: race}
+	npc.npcAge = int32(selectedAge)
 }
 
 func selectRacialAgeMap(race api.RaceName) map[api.AgeGroup][]int {
@@ -62,7 +59,7 @@ func selectRacialAgeMap(race api.RaceName) map[api.AgeGroup][]int {
 }
 
 func selectWeightedRace() api.RaceName {
-	weightedSelector := r.Intn(99) + 1
+	weightedSelector := r.Intn(99)
 
 	for raceName, intRange := range weightedRaces {
 		min := intRange[0]
@@ -75,7 +72,7 @@ func selectWeightedRace() api.RaceName {
 }
 
 func selectWeightedAge() api.AgeGroup {
-	weightedSelector := r.Intn(99) + 1
+	weightedSelector := r.Intn(99)
 
 	for ageGroup, intRange := range weightedAgeGroups {
 		min := intRange[0]
