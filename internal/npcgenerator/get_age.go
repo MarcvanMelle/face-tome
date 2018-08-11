@@ -59,7 +59,7 @@ func selectRacialAgeMap(race api.RaceName) map[api.AgeGroup][]int {
 }
 
 func selectWeightedRace() api.RaceName {
-	weightedSelector := r.Intn(99)
+	weightedSelector := r.Intn(100)
 
 	for raceName, intRange := range weightedRaces {
 		min := intRange[0]
@@ -72,7 +72,7 @@ func selectWeightedRace() api.RaceName {
 }
 
 func selectWeightedAge() api.AgeGroup {
-	weightedSelector := r.Intn(99)
+	weightedSelector := r.Intn(100)
 
 	for ageGroup, intRange := range weightedAgeGroups {
 		min := intRange[0]

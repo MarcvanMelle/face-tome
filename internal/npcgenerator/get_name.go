@@ -108,7 +108,7 @@ func readSampleFiles(lang api.RealLanguage, filenames []string) ([]byte, error) 
 }
 
 func selectWeightedGender() api.Gender {
-	weightedSelector := r.Intn(99)
+	weightedSelector := r.Intn(100)
 
 	for gender, intRange := range weightedGenders {
 		min := intRange[0]

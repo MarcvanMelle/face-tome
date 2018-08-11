@@ -12,7 +12,7 @@ func (npc *NpcData) setAlignment() {
 
 	if alignment == api.Alignment_ALIGN_UNKNOWN {
 		if class == api.ClassName_CLASSNAME_PALADIN {
-			chance := r.Intn(99)
+			chance := r.Intn(100)
 			if chance < 10 {
 				selectWeightedAlignment()
 			} else {
@@ -28,7 +28,7 @@ func (npc *NpcData) setAlignment() {
 }
 
 func selectWeightedAlignment() api.Alignment {
-	weightedSelector := r.Intn(99)
+	weightedSelector := r.Intn(100)
 
 	for alignment, intRange := range weightedAlignments {
 		min := intRange[0]
@@ -62,8 +62,8 @@ var classList = []api.ClassName{
 	api.ClassName_CLASSNAME_MONK,
 	api.ClassName_CLASSNAME_PALADIN,
 	api.ClassName_CLASSNAME_RANGER,
+	api.ClassName_CLASSNAME_ROGUE,
 	api.ClassName_CLASSNAME_SORCEROR,
 	api.ClassName_CLASSNAME_WARLOCK,
-	api.ClassName_CLASSNAME_WARRIOR,
 	api.ClassName_CLASSNAME_WIZARD,
 }

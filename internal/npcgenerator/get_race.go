@@ -3,8 +3,10 @@ package npcgenerator
 import api "github.com/MarcvanMelle/face-tome/internal/pb/facetomeapi"
 
 type npcRace struct {
-	raceName  api.RaceName
-	raceSpeed int32
+	raceName     api.RaceName
+	raceSpeed    int32
+	variantHuman bool
+	halfElf      bool
 }
 
 func (npc *NpcData) setRace() {

@@ -20,6 +20,7 @@ type NpcData struct {
 	fighterLevel api.Level
 	numStatImps  int
 	numFeats     int
+	npcStats     npcStats
 }
 
 var r = rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -32,11 +33,11 @@ func GetNPC(request *api.GetNPCRequest) (*api.GetNPCResponse, error) {
 	npc.setAlignment()
 	npc.setClass()
 	npc.setRace()
+	npc.setStats()
 
-	var apiClasses []*api.Class
-	for _, class := range npc.npcClass {
-		apiClass := &api.Class{Name: class.className, Level: class.classLevel}
-		apiClasses = append(apiClasses, apiClass)
+	apiClasses := make([]*api.Class, len(npc.npcClass), len(npc.npcClass))
+	for i, class := range npc.npcClass {
+		apiClasses[i] = &api.Class{Name: class.className, Level: class.classLevel}
 	}
 
 	npcResponse := &api.GetNPCResponse{
@@ -52,14 +53,6 @@ func GetNPC(request *api.GetNPCRequest) (*api.GetNPCResponse, error) {
 				Race: npc.npcRace.raceName,
 				RacialTraits: &api.Race_MountainDwarfTraits{
 					MountainDwarfTraits: &api.MountainDwarfTraits{
-						StatMod: &api.Stats{
-							Str: 2,
-							Con: 2,
-							Dex: 0,
-							Int: 0,
-							Wis: 0,
-							Cha: 0,
-						},
 						Darkvision:             true,
 						DwarvenResilience:      true,
 						DwarvenCombatTraining:  true,
@@ -70,12 +63,12 @@ func GetNPC(request *api.GetNPCRequest) (*api.GetNPCResponse, error) {
 				},
 			},
 			Stats: &api.Stats{
-				Str: 12,
-				Con: 13,
-				Dex: 18,
-				Int: 14,
-				Wis: 10,
-				Cha: 20,
+				Str: int32(npc.npcStats.Stats["str"]),
+				Con: int32(npc.npcStats.Stats["con"]),
+				Dex: int32(npc.npcStats.Stats["dex"]),
+				Int: int32(npc.npcStats.Stats["int"]),
+				Wis: int32(npc.npcStats.Stats["wis"]),
+				Cha: int32(npc.npcStats.Stats["cha"]),
 			},
 			Skill: []*api.Skill{
 				&api.Skill{

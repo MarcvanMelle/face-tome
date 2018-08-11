@@ -1,6 +1,8 @@
 package npcgenerator
 
-import api "github.com/MarcvanMelle/face-tome/internal/pb/facetomeapi"
+import (
+	api "github.com/MarcvanMelle/face-tome/internal/pb/facetomeapi"
+)
 
 type npcClass struct {
 	className  api.ClassName
@@ -22,10 +24,12 @@ func (npc *NpcData) setClass() {
 		npc.fighterLevel = level
 	}
 
-	chance := r.Intn(99)
+	chance := r.Intn(100)
 	if chance == 0 && npc.levelSum < 15 {
 		generateNewClass(npc)
 	}
+
+	npc.calculateAbilityScoreImps()
 }
 
 func generateNewClass(npc *NpcData) {
@@ -53,14 +57,14 @@ func generateNewClass(npc *NpcData) {
 		npc.fighterLevel = newClassLevel
 	}
 
-	chance := r.Intn(99)
+	chance := r.Intn(100)
 	if chance == 0 && npc.levelSum < 15 {
 		generateNewClass(npc)
 	}
 }
 
 func selectWeightedLevel() api.Level {
-	weightedSelector := r.Intn(99)
+	weightedSelector := r.Intn(100)
 
 	for level, intRange := range weightedLevels {
 		min := intRange[0]
@@ -88,7 +92,7 @@ func containClass(s []api.ClassName, val api.ClassName) bool {
 	return false
 }
 
-func calculateAbilityScoreImps(npc *NpcData) {
+func (npc *NpcData) calculateAbilityScoreImps() {
 	var totalImps int
 	switch {
 	case npc.levelSum >= 19:
@@ -115,14 +119,13 @@ func calculateAbilityScoreImps(npc *NpcData) {
 	}
 
 	for i := 1; i <= totalImps; i++ {
-		chance := r.Intn(99)
+		chance := r.Intn(100)
 		if chance < 50 {
 			npc.numStatImps++
 		} else {
 			npc.numFeats++
 		}
 	}
-
 }
 
 var weightedLevels = map[api.Level][]int{
