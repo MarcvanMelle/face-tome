@@ -21,6 +21,8 @@ type NpcData struct {
 	numStatImps  int
 	numFeats     int
 	npcStats     npcStats
+	skills       []*api.Skill
+	background   api.Background
 }
 
 var r = rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -34,6 +36,8 @@ func GetNPC(request *api.GetNPCRequest) (*api.GetNPCResponse, error) {
 	npc.setClass()
 	npc.setRace()
 	npc.setStats()
+	npc.setBackground()
+	npc.setSkills()
 
 	apiClasses := make([]*api.Class, len(npc.npcClass), len(npc.npcClass))
 	for i, class := range npc.npcClass {
@@ -44,23 +48,22 @@ func GetNPC(request *api.GetNPCRequest) (*api.GetNPCResponse, error) {
 		NpcData: &api.NPC{
 			FirstName: npc.npcName.firstName,
 			LastName:  npc.npcName.lastName,
+			Gender:    npc.npcGender,
 			Age:       npc.npcAge,
 			Alignment: npc.npcAlign,
 			Speed:     npc.npcRace.raceSpeed,
 			Language:  npc.npcLang,
 			Class:     apiClasses,
 			Race: &api.Race{
-				Race: npc.npcRace.raceName,
-				RacialTraits: &api.Race_MountainDwarfTraits{
-					MountainDwarfTraits: &api.MountainDwarfTraits{
-						Darkvision:             true,
-						DwarvenResilience:      true,
-						DwarvenCombatTraining:  true,
-						DwarvenToolProficiency: true,
-						StoneCunning:           true,
-						DwarvenArmorTraining:   true,
-					},
-				},
+				Race:         npc.npcRace.raceName,
+				RacialTraits: npc.npcRace.racialTraits,
+			},
+			PhysicalTraits: &api.PhysicalTraits{
+				HeightFeet: 4,
+				HeightInch: 2,
+				Weight:     160,
+				SkinTone:   api.PhysicalTraits_SKIN_DUSKY,
+				Traits:     []string{},
 			},
 			Stats: &api.Stats{
 				Str: int32(npc.npcStats.Stats["str"]),
@@ -70,34 +73,10 @@ func GetNPC(request *api.GetNPCRequest) (*api.GetNPCResponse, error) {
 				Wis: int32(npc.npcStats.Stats["wis"]),
 				Cha: int32(npc.npcStats.Stats["cha"]),
 			},
-			Skill: []*api.Skill{
-				&api.Skill{
-					SkillName:   api.Skill_SKILL_ACROBATICS,
-					Proficiency: true,
-					StatMod:     "Dex", // Should probably make this an enum
-				},
-				&api.Skill{
-					SkillName:   api.Skill_SKILL_DECEPTION,
-					Proficiency: true,
-					StatMod:     "Cha",
-				},
-				&api.Skill{
-					SkillName:   api.Skill_SKILL_SLEIGHT,
-					Proficiency: true,
-					StatMod:     "Dex",
-				},
-			},
-			PhysicalTraits: &api.PhysicalTraits{
-				HeightFeet: 4,
-				HeightInch: 2,
-				Weight:     160,
-				SkinTone:   api.PhysicalTraits_SKIN_DUSKY,
-				Traits:     []string{},
-			},
+			Skill: npc.skills,
 			PsychologicalTraits: &api.PsychologicalTraits{
 				Traits: []string{},
 			},
-			Gender: npc.npcGender,
 		},
 	}
 

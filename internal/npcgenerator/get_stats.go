@@ -1,7 +1,6 @@
 package npcgenerator
 
 import (
-	"fmt"
 	"sort"
 
 	api "github.com/MarcvanMelle/face-tome/internal/pb/facetomeapi"
@@ -38,14 +37,9 @@ func (npc *NpcData) setStats() {
 		sort.Sort(sort.Reverse(sort.IntSlice(stats)))
 	}
 
-	fmt.Println("Stat Imps: ", npc.numStatImps, " Feats: ", npc.numFeats)
-	fmt.Println("Base stats: ", stats)
 	npc.statsForClass(stats)
-	fmt.Println("Class stats: ", npc.npcStats.Stats)
 	npc.statsForRace()
-	fmt.Println("Race stats: ", npc.npcStats.Stats)
 	npc.statsForLevel()
-	fmt.Println("Level stats: ", npc.npcStats.Stats)
 
 	// npc.npcStats = raceBlock
 }
