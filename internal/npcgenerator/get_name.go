@@ -21,7 +21,10 @@ type npcName struct {
 func (npc *NpcData) setName() {
 	lang := npc.request.GetLanguage()
 	if lang == api.RealLanguage_LANG_UNKNOWN {
-		lang = api.RealLanguage_LANG_EN
+		chance := r.Intn(10)
+		if chance != 0 {
+			lang = realLanguageList[r.Intn(len(realLanguageList))]
+		}
 	}
 
 	gender := npc.request.GetGender()
@@ -47,6 +50,10 @@ func (npc *NpcData) setName() {
 }
 
 func getFirstName(lang api.RealLanguage, gender api.Gender) (string, error) {
+	if lang == api.RealLanguage_LANG_UNKNOWN {
+		lang = realLanguageList[r.Intn(len(realLanguageList))]
+	}
+
 	sample, err := buildNameSample(lang, gender)
 	if err != nil {
 		return "", err
@@ -57,6 +64,10 @@ func getFirstName(lang api.RealLanguage, gender api.Gender) (string, error) {
 }
 
 func getLastName(lang api.RealLanguage) (string, error) {
+	if lang == api.RealLanguage_LANG_UNKNOWN {
+		lang = realLanguageList[r.Intn(len(realLanguageList))]
+	}
+
 	sample, err := buildLastNameSample(lang)
 	if err != nil {
 		return "", err
@@ -72,15 +83,15 @@ func buildNameSample(lang api.RealLanguage, gender api.Gender) ([]byte, error) {
 
 	switch gender {
 	case api.Gender_GEN_MALE:
-		sample, err = readSampleFiles(lang, []string{"first_names_male", "first_names_neutral"})
+		sample, err = readSampleFiles(lang, []string{"first_names_male"})
 	case api.Gender_GEN_TRANSMALE:
-		sample, err = readSampleFiles(lang, []string{"first_names_male", "first_names_neutral"})
+		sample, err = readSampleFiles(lang, []string{"first_names_male"})
 	case api.Gender_GEN_FEMALE:
-		sample, err = readSampleFiles(lang, []string{"first_names_female", "first_names_neutral"})
+		sample, err = readSampleFiles(lang, []string{"first_names_female"})
 	case api.Gender_GEN_TRANSFEMALE:
-		sample, err = readSampleFiles(lang, []string{"first_names_female", "first_names_neutral"})
+		sample, err = readSampleFiles(lang, []string{"first_names_female"})
 	default:
-		sample, err = readSampleFiles(lang, []string{"first_names_female", "first_names_male", "first_names_neutral"})
+		sample, err = readSampleFiles(lang, []string{"first_names_female", "first_names_male"})
 	}
 	return sample, err
 }
@@ -129,9 +140,30 @@ var weightedGenders = map[api.Gender][]int{
 	api.Gender_GEN_UNGENDERED:  generateIntRange(80, 86),
 }
 
+var realLanguageList = []api.RealLanguage{
+	api.RealLanguage_LANG_AR,
+	api.RealLanguage_LANG_CS,
+	api.RealLanguage_LANG_DE,
+	api.RealLanguage_LANG_EL,
+	api.RealLanguage_LANG_EN,
+	api.RealLanguage_LANG_ES,
+	api.RealLanguage_LANG_FI,
+	api.RealLanguage_LANG_FR,
+	api.RealLanguage_LANG_GA,
+	api.RealLanguage_LANG_HE,
+	api.RealLanguage_LANG_HI,
+	api.RealLanguage_LANG_IT,
+	api.RealLanguage_LANG_JA,
+	api.RealLanguage_LANG_KO,
+	api.RealLanguage_LANG_PL,
+	api.RealLanguage_LANG_RU,
+	api.RealLanguage_LANG_SV,
+	api.RealLanguage_LANG_VI,
+	api.RealLanguage_LANG_ZH,
+}
+
 var mapAPILangToISO639 = map[api.RealLanguage]string{
 	api.RealLanguage_LANG_UNKNOWN: "unknown",
-	api.RealLanguage_LANG_AF:      "af",
 	api.RealLanguage_LANG_AR:      "ar",
 	api.RealLanguage_LANG_CS:      "cs",
 	api.RealLanguage_LANG_DE:      "de",
@@ -146,10 +178,8 @@ var mapAPILangToISO639 = map[api.RealLanguage]string{
 	api.RealLanguage_LANG_IT:      "it",
 	api.RealLanguage_LANG_JA:      "ja",
 	api.RealLanguage_LANG_KO:      "ko",
-	api.RealLanguage_LANG_LA:      "la",
 	api.RealLanguage_LANG_PL:      "pl",
 	api.RealLanguage_LANG_RU:      "ru",
-	api.RealLanguage_LANG_SA:      "sa",
 	api.RealLanguage_LANG_SV:      "sv",
 	api.RealLanguage_LANG_VI:      "vi",
 	api.RealLanguage_LANG_ZH:      "zh",

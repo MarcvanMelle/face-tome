@@ -1,6 +1,10 @@
 package npcgenerator
 
-import api "github.com/MarcvanMelle/face-tome/internal/pb/facetomeapi"
+import (
+	"fmt"
+
+	api "github.com/MarcvanMelle/face-tome/internal/pb/facetomeapi"
+)
 
 type npcRace struct {
 	raceName         api.RaceName
@@ -36,7 +40,7 @@ func (npc *NpcData) setRace() {
 }
 
 func (npc *NpcData) setRacialTraits() {
-	baseTraits := racialTraitsMap
+	baseTraits := getBaseTraits()
 
 	switch npc.npcRace.raceName {
 	case api.RaceName_RACE_DWARF_HILL:
@@ -117,6 +121,8 @@ func (npc *NpcData) setRacialTraits() {
 		baseTraits["infernal_legacy"] = true
 	}
 
+	fmt.Println(baseTraits)
+
 	for key, keep := range baseTraits {
 		if !keep {
 			delete(baseTraits, key)
@@ -124,6 +130,48 @@ func (npc *NpcData) setRacialTraits() {
 	}
 
 	npc.npcRace.racialTraits = baseTraits
+}
+
+func getBaseTraits() map[string]bool {
+	return map[string]bool{
+		"artifice_lore":            false,
+		"brave":                    false,
+		"breath_weapon":            false,
+		"cantrip":                  false,
+		"damage_resistance":        false,
+		"darkvision":               false,
+		"drow_magic":               false,
+		"drow_weapon_training":     false,
+		"dwarven_combat_training":  false,
+		"dwarven_resilience":       false,
+		"dwarven_tool_proficiency": false,
+		"dwarven_toughness":        false,
+		"dwarven_armor_training":   false,
+		"elven_weapon_trainging":   false,
+		"extra_language":           false,
+		"fey_ancestry":             false,
+		"gnome_cunning":            false,
+		"fleet_of_foot":            false,
+		"halfling_nimble":          false,
+		"hellish_resistance":       false,
+		"infernal_legacy":          false,
+		"keen_senses":              false,
+		"lucky":                    false,
+		"mask_of_the_wild":         false,
+		"menacing":                 false,
+		"natural_illusion":         false,
+		"natural_stealth":          false,
+		"relentless_endurance":     false,
+		"savage_attacks":           false,
+		"skill_versatility":        false,
+		"speak_with_breaks":        false,
+		"stone_cunning":            false,
+		"stout_resilience":         false,
+		"superior_dark_vision":     false,
+		"sunlight_sensitive":       false,
+		"tinker":                   false,
+		"trance":                   false,
+	}
 }
 
 var raceSpeedMap = map[api.RaceName]int32{
@@ -190,44 +238,4 @@ var draconicAncestryList = []api.DraconicAncestry{
 	api.DraconicAncestry_DRAC_ANCS_RED,
 	api.DraconicAncestry_DRAC_ANCS_SILVER,
 	api.DraconicAncestry_DRAC_ANCS_WHITE,
-}
-
-var racialTraitsMap = map[string]bool{
-	"artifice_lore":            false,
-	"brave":                    false,
-	"breath_weapon":            false,
-	"cantrip":                  false,
-	"damage_resistance":        false,
-	"darkvision":               false,
-	"drow_magic":               false,
-	"drow_weapon_training":     false,
-	"dwarven_combat_training":  false,
-	"dwarven_resilience":       false,
-	"dwarven_tool_proficiency": false,
-	"dwarven_toughness":        false,
-	"dwarven_armor_training":   false,
-	"elven_weapon_trainging":   false,
-	"extra_language":           false,
-	"fey_ancestry":             false,
-	"gnome_cunning":            false,
-	"fleet_of_foot":            false,
-	"halfling_nimble":          false,
-	"hellish_resistance":       false,
-	"infernal_legacy":          false,
-	"keen_senses":              false,
-	"lucky":                    false,
-	"mask_of_the_wild":         false,
-	"menacing":                 false,
-	"natural_illusion":         false,
-	"natural_stealth":          false,
-	"relentless_endurance":     false,
-	"savage_attacks":           false,
-	"skill_versatility":        false,
-	"speak_with_breaks":        false,
-	"stone_cunning":            false,
-	"stout_resilience":         false,
-	"superior_dark_vision":     false,
-	"sunlight_sensitive":       false,
-	"tinker":                   false,
-	"trance":                   false,
 }
