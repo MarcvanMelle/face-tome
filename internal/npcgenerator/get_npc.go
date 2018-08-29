@@ -30,11 +30,11 @@ var r = rand.New(rand.NewSource(time.Now().UnixNano()))
 // GetNPC returns the fully generated NPC response based on provided protocol buffer parameters
 func GetNPC(request *api.GetNPCRequest) (*api.GetNPCResponse, error) {
 	npc := &NpcData{request: request, npcLang: []api.Language{api.Language_LANG_COMMON}}
+	npc.setRace()
 	npc.setName()
 	npc.setAge()
 	npc.setAlignment()
 	npc.setClass()
-	npc.setRace()
 	npc.setStats()
 	npc.setBackground()
 	npc.setSkills()

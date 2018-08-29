@@ -16,7 +16,13 @@ type npcRace struct {
 }
 
 func (npc *NpcData) setRace() {
-	race := npc.npcRace.raceName
+	race := npc.request.GetRace()
+	if race == api.RaceName_RACE_UNKNOWN {
+		race = selectWeightedRace()
+	}
+
+	npc.npcRace = &npcRace{raceName: race}
+
 	npc.npcRace.raceSpeed = raceSpeedMap[race]
 
 	secondLanguage := raceLangMap[race]
@@ -174,6 +180,19 @@ func getBaseTraits() map[string]bool {
 	}
 }
 
+func selectWeightedRace() api.RaceName {
+	weightedSelector := r.Intn(100)
+
+	for raceName, intRange := range weightedRaces {
+		min := intRange[0]
+		max := intRange[len(intRange)-1]
+		if (weightedSelector > min && weightedSelector < max) || weightedSelector == min || weightedSelector == max {
+			return raceName
+		}
+	}
+	return api.RaceName_RACE_HUMAN
+}
+
 var raceSpeedMap = map[api.RaceName]int32{
 	api.RaceName_RACE_DWARF_HILL:        25,
 	api.RaceName_RACE_DWARF_MOUNTAIN:    25,
@@ -238,4 +257,38 @@ var draconicAncestryList = []api.DraconicAncestry{
 	api.DraconicAncestry_DRAC_ANCS_RED,
 	api.DraconicAncestry_DRAC_ANCS_SILVER,
 	api.DraconicAncestry_DRAC_ANCS_WHITE,
+}
+
+var races = []api.RaceName{
+	api.RaceName_RACE_DWARF_HILL,
+	api.RaceName_RACE_DWARF_MOUNTAIN,
+	api.RaceName_RACE_ELF_HIGH,
+	api.RaceName_RACE_ELF_WOOD,
+	api.RaceName_RACE_ELF_DROW,
+	api.RaceName_RACE_HALFING_LIGHTFOOT,
+	api.RaceName_RACE_HALFLING_STOUT,
+	api.RaceName_RACE_HUMAN,
+	api.RaceName_RACE_DRAGONBORN,
+	api.RaceName_RACE_GNOME_FOREST,
+	api.RaceName_RACE_GNOME_ROCK,
+	api.RaceName_RACE_HALF_ELF,
+	api.RaceName_RACE_HALF_ORC,
+	api.RaceName_RACE_TIEFLING,
+}
+
+var weightedRaces = map[api.RaceName][]int{
+	api.RaceName_RACE_DWARF_HILL:        generateIntRange(36, 40),
+	api.RaceName_RACE_DWARF_MOUNTAIN:    generateIntRange(41, 45),
+	api.RaceName_RACE_ELF_HIGH:          generateIntRange(46, 50),
+	api.RaceName_RACE_ELF_WOOD:          generateIntRange(51, 55),
+	api.RaceName_RACE_ELF_DROW:          generateIntRange(56, 60),
+	api.RaceName_RACE_HALFING_LIGHTFOOT: generateIntRange(61, 65),
+	api.RaceName_RACE_HALFLING_STOUT:    generateIntRange(66, 70),
+	api.RaceName_RACE_HUMAN:             generateIntRange(0, 35),
+	api.RaceName_RACE_DRAGONBORN:        generateIntRange(71, 75),
+	api.RaceName_RACE_GNOME_FOREST:      generateIntRange(76, 80),
+	api.RaceName_RACE_GNOME_ROCK:        generateIntRange(81, 85),
+	api.RaceName_RACE_HALF_ELF:          generateIntRange(86, 90),
+	api.RaceName_RACE_HALF_ORC:          generateIntRange(91, 95),
+	api.RaceName_RACE_TIEFLING:          generateIntRange(96, 99),
 }
