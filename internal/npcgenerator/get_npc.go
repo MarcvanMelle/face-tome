@@ -16,6 +16,7 @@ type NpcData struct {
 	npcAlign     api.Alignment
 	npcClass     []*npcClass
 	npcLang      []api.Language
+	npcPsyche    []string
 	levelSum     api.Level
 	fighterLevel api.Level
 	numStatImps  int
@@ -38,6 +39,7 @@ func GetNPC(request *api.GetNPCRequest) (*api.GetNPCResponse, error) {
 	npc.setStats()
 	npc.setBackground()
 	npc.setSkills()
+	npc.setPsyche()
 
 	apiClasses := make([]*api.Class, len(npc.npcClass), len(npc.npcClass))
 	for i, class := range npc.npcClass {
@@ -75,7 +77,7 @@ func GetNPC(request *api.GetNPCRequest) (*api.GetNPCResponse, error) {
 			},
 			Skill: npc.skills,
 			PsychologicalTraits: &api.PsychologicalTraits{
-				Traits: []string{},
+				Traits: npc.npcPsyche,
 			},
 		},
 	}

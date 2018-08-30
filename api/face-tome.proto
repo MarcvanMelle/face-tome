@@ -74,6 +74,10 @@ enum RealLanguage {
   LANG_SV = 20;
   LANG_VI = 21;
   LANG_ZH = 22;
+  LANG_JRR_QUENYA = 23;
+  LANG_JRR_SINDAR = 24;
+  LANG_JRR_DWARVISH = 25;
+  LANG_JRR_HALFLING = 26;
 }
 
 enum RaceName {

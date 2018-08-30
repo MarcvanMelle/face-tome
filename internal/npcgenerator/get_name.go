@@ -20,6 +20,32 @@ type npcName struct {
 
 func (npc *NpcData) setName() {
 	lang := npc.request.GetLanguage()
+	race := npc.npcRace.raceName
+	if race == api.RaceName_RACE_DWARF_HILL || race == api.RaceName_RACE_DWARF_MOUNTAIN {
+		chance := r.Intn(10)
+		if chance != 0 {
+			// lang = api.RealLanguage_LANG_JRR_DWARVISH
+		}
+	}
+
+	if race == api.RaceName_RACE_ELF_DROW || race == api.RaceName_RACE_ELF_HIGH || race == api.RaceName_RACE_ELF_WOOD {
+		chance := r.Intn(11)
+		if chance != 0 {
+			if chance%2 == 1 {
+				// lang = api.RealLanguage_LANG_JRR_QUENYA
+			} else {
+				// lang = api.RealLanguage_LANG_JRR_SINDAR
+			}
+		}
+	}
+
+	if race == api.RaceName_RACE_HALFING_LIGHTFOOT || race == api.RaceName_RACE_HALFLING_STOUT {
+		chance := r.Intn(11)
+		if chance != 0 {
+			// lang = api.RealLanguage_LANG_JRR_HALFLING
+		}
+	}
+
 	if lang == api.RealLanguage_LANG_UNKNOWN {
 		chance := r.Intn(10)
 		if chance != 0 {
@@ -163,24 +189,28 @@ var realLanguageList = []api.RealLanguage{
 }
 
 var mapAPILangToISO639 = map[api.RealLanguage]string{
-	api.RealLanguage_LANG_UNKNOWN: "unknown",
-	api.RealLanguage_LANG_AR:      "ar",
-	api.RealLanguage_LANG_CS:      "cs",
-	api.RealLanguage_LANG_DE:      "de",
-	api.RealLanguage_LANG_EL:      "el",
-	api.RealLanguage_LANG_EN:      "en",
-	api.RealLanguage_LANG_ES:      "es",
-	api.RealLanguage_LANG_FI:      "fi",
-	api.RealLanguage_LANG_FR:      "fr",
-	api.RealLanguage_LANG_GA:      "ga",
-	api.RealLanguage_LANG_HE:      "he",
-	api.RealLanguage_LANG_HI:      "hi",
-	api.RealLanguage_LANG_IT:      "it",
-	api.RealLanguage_LANG_JA:      "ja",
-	api.RealLanguage_LANG_KO:      "ko",
-	api.RealLanguage_LANG_PL:      "pl",
-	api.RealLanguage_LANG_RU:      "ru",
-	api.RealLanguage_LANG_SV:      "sv",
-	api.RealLanguage_LANG_VI:      "vi",
-	api.RealLanguage_LANG_ZH:      "zh",
+	api.RealLanguage_LANG_UNKNOWN:      "unknown",
+	api.RealLanguage_LANG_AR:           "ar",
+	api.RealLanguage_LANG_CS:           "cs",
+	api.RealLanguage_LANG_DE:           "de",
+	api.RealLanguage_LANG_EL:           "el",
+	api.RealLanguage_LANG_EN:           "en",
+	api.RealLanguage_LANG_ES:           "es",
+	api.RealLanguage_LANG_FI:           "fi",
+	api.RealLanguage_LANG_FR:           "fr",
+	api.RealLanguage_LANG_GA:           "ga",
+	api.RealLanguage_LANG_HE:           "he",
+	api.RealLanguage_LANG_HI:           "hi",
+	api.RealLanguage_LANG_IT:           "it",
+	api.RealLanguage_LANG_JA:           "ja",
+	api.RealLanguage_LANG_KO:           "ko",
+	api.RealLanguage_LANG_PL:           "pl",
+	api.RealLanguage_LANG_RU:           "ru",
+	api.RealLanguage_LANG_SV:           "sv",
+	api.RealLanguage_LANG_VI:           "vi",
+	api.RealLanguage_LANG_ZH:           "zh",
+	api.RealLanguage_LANG_JRR_DWARVISH: "dwarf",
+	api.RealLanguage_LANG_JRR_HALFLING: "halflinf",
+	api.RealLanguage_LANG_JRR_QUENYA:   "quenya",
+	api.RealLanguage_LANG_JRR_SINDAR:   "sindar",
 }
