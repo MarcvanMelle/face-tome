@@ -1,8 +1,7 @@
 package npcgenerator
 
 func (npc *NpcData) setPsyche() {
-	violencePsyche := selectWeightedPsycheTrait(weightedViolencePsyche, 13)
-
+	// violencePsyche := selectWeightedPsycheTrait(weightedViolencePsyche, 13)
 }
 
 func selectWeightedPsycheTrait(traitMap map[string][]int, max int) string {

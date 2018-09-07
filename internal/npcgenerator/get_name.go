@@ -24,7 +24,7 @@ func (npc *NpcData) setName() {
 	if race == api.RaceName_RACE_DWARF_HILL || race == api.RaceName_RACE_DWARF_MOUNTAIN {
 		chance := r.Intn(10)
 		if chance != 0 {
-			// lang = api.RealLanguage_LANG_JRR_DWARVISH
+			lang = api.RealLanguage_LANG_JRR_DWARVISH
 		}
 	}
 
@@ -32,9 +32,9 @@ func (npc *NpcData) setName() {
 		chance := r.Intn(11)
 		if chance != 0 {
 			if chance%2 == 1 {
-				// lang = api.RealLanguage_LANG_JRR_QUENYA
+				lang = api.RealLanguage_LANG_JRR_QUENYA
 			} else {
-				// lang = api.RealLanguage_LANG_JRR_SINDAR
+				lang = api.RealLanguage_LANG_JRR_SINDAR
 			}
 		}
 	}
@@ -42,7 +42,7 @@ func (npc *NpcData) setName() {
 	if race == api.RaceName_RACE_HALFING_LIGHTFOOT || race == api.RaceName_RACE_HALFLING_STOUT {
 		chance := r.Intn(11)
 		if chance != 0 {
-			// lang = api.RealLanguage_LANG_JRR_HALFLING
+			lang = api.RealLanguage_LANG_JRR_HALFLING
 		}
 	}
 
@@ -64,9 +64,12 @@ func (npc *NpcData) setName() {
 		fmt.Println(err)
 	}
 
-	lastName, err := getLastName(lang)
-	if err != nil {
-		fmt.Println(err)
+	var lastName string
+	if lang != api.RealLanguage_LANG_JRR_QUENYA && lang != api.RealLanguage_LANG_JRR_SINDAR {
+		lastName, err = getLastName(lang)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 
 	npc.npcName = &npcName{
@@ -210,7 +213,7 @@ var mapAPILangToISO639 = map[api.RealLanguage]string{
 	api.RealLanguage_LANG_VI:           "vi",
 	api.RealLanguage_LANG_ZH:           "zh",
 	api.RealLanguage_LANG_JRR_DWARVISH: "dwarf",
-	api.RealLanguage_LANG_JRR_HALFLING: "halflinf",
+	api.RealLanguage_LANG_JRR_HALFLING: "halfling",
 	api.RealLanguage_LANG_JRR_QUENYA:   "quenya",
 	api.RealLanguage_LANG_JRR_SINDAR:   "sindar",
 }
