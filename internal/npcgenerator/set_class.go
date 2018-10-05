@@ -17,7 +17,11 @@ func (npc *NpcData) setClass() {
 		firstClass.classLevel = api.Level_LEVEL_ONE
 		return
 	}
-	level := selectWeightedLevel()
+
+	level := npc.request.GetLevel()
+	if level == api.Level_LEVEL_UNKNOWN {
+		level = selectWeightedLevel()
+	}
 	firstClass.classLevel = level
 	npc.levelSum = level
 	if firstClass.className == api.ClassName_CLASSNAME_FIGHTER {

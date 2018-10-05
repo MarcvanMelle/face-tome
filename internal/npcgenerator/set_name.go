@@ -20,36 +20,38 @@ type npcName struct {
 
 func (npc *NpcData) setName() {
 	lang := npc.request.GetLanguage()
-	race := npc.npcRace.raceName
-	if race == api.RaceName_RACE_DWARF_HILL || race == api.RaceName_RACE_DWARF_MOUNTAIN {
-		chance := r.Intn(10)
-		if chance != 0 {
-			lang = api.RealLanguage_LANG_JRR_DWARVISH
-		}
-	}
-
-	if race == api.RaceName_RACE_ELF_DROW || race == api.RaceName_RACE_ELF_HIGH || race == api.RaceName_RACE_ELF_WOOD {
-		chance := r.Intn(11)
-		if chance != 0 {
-			if chance%2 == 1 {
-				lang = api.RealLanguage_LANG_JRR_QUENYA
-			} else {
-				lang = api.RealLanguage_LANG_JRR_SINDAR
+	if lang == api.RealLanguage_LANG_UNKNOWN {
+		race := npc.npcRace.raceName
+		if race == api.RaceName_RACE_DWARF_HILL || race == api.RaceName_RACE_DWARF_MOUNTAIN {
+			chance := r.Intn(10)
+			if chance != 0 {
+				lang = api.RealLanguage_LANG_JRR_DWARVISH
 			}
 		}
-	}
 
-	if race == api.RaceName_RACE_HALFING_LIGHTFOOT || race == api.RaceName_RACE_HALFLING_STOUT {
-		chance := r.Intn(11)
-		if chance != 0 {
-			lang = api.RealLanguage_LANG_JRR_HALFLING
+		if race == api.RaceName_RACE_ELF_DROW || race == api.RaceName_RACE_ELF_HIGH || race == api.RaceName_RACE_ELF_WOOD {
+			chance := r.Intn(11)
+			if chance != 0 {
+				if chance%2 == 1 {
+					lang = api.RealLanguage_LANG_JRR_QUENYA
+				} else {
+					lang = api.RealLanguage_LANG_JRR_SINDAR
+				}
+			}
 		}
-	}
 
-	if lang == api.RealLanguage_LANG_UNKNOWN {
-		chance := r.Intn(10)
-		if chance != 0 {
-			lang = realLanguageList[r.Intn(len(realLanguageList))]
+		if race == api.RaceName_RACE_HALFING_LIGHTFOOT || race == api.RaceName_RACE_HALFLING_STOUT {
+			chance := r.Intn(11)
+			if chance != 0 {
+				lang = api.RealLanguage_LANG_JRR_HALFLING
+			}
+		}
+
+		if lang == api.RealLanguage_LANG_UNKNOWN {
+			chance := r.Intn(10)
+			if chance != 0 {
+				lang = realLanguageList[r.Intn(len(realLanguageList))]
+			}
 		}
 	}
 
@@ -64,9 +66,11 @@ func (npc *NpcData) setName() {
 		fmt.Println(err)
 	}
 
+	surl := npc.request.GetSurnameLanguage()
+
 	var lastName string
 	if lang != api.RealLanguage_LANG_JRR_QUENYA && lang != api.RealLanguage_LANG_JRR_SINDAR {
-		lastName, err = getLastName(lang)
+		lastName, err = getLastName(surl)
 		if err != nil {
 			fmt.Println(err)
 		}

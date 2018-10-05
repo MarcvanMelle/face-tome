@@ -3,7 +3,7 @@ FIRST = %w[
 ]
 
 SECOND = %w[
-  astim[sight] borith[chief] drâth[tree] dûnost[beard] edaris[blood] erôth[earth] fel[frost] gaml[hand] grimst[house] heim[helm] hiem[head] hreth[shadow] isidar[rose] jurgen[dragon] knurl[stone] korda[hammer] kóstha[foot] mithrim[star] nal[hail] nien[heart] ragni[river] sesti[holy] sweld[tear] thorv[shield] thrond[eye] und[warrior]
+  astim[sight] borith[chief] drâth[tree] dûnost[beard] edaris[blood] erôth[earth] fel[frost] gaml[hand] grimst[house] heim[helm] hiem[head] hreth[shadow] isidar[rose] jurgen[dragon] knurl[stone] korda[hammer] kostha[foot] mithrim[star] nal[hail] nien[heart] ragni[river] sesti[holy] sweld[tear] thorv[shield] thrond[eye] und[warrior]
 ]
 
 def mix

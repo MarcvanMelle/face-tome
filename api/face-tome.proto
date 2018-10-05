@@ -13,11 +13,13 @@ service FaceTome {
 message GetNPCRequest {
   Gender gender = 1;
   RealLanguage language = 2;
-  AgeGroup relative_age = 3;
-  RaceName race = 4;
-  Alignment alignment = 5;
-  ClassName class = 6;
-  Level level = 7;
+  RealLanguage surname_language = 3;
+  AgeGroup relative_age = 4;
+  RaceName race = 5;
+  Alignment alignment = 6;
+  ClassName class = 7;
+  Level level = 8;
+  Background background = 9;
 }
 
 message GetNPCResponse {

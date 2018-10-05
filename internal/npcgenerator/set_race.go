@@ -27,7 +27,7 @@ func (npc *NpcData) setRace() {
 
 	secondLanguage := raceLangMap[race]
 	slicedLangList := langList[1:]
-	if secondLanguage == api.Language_LANG_COMMON {
+	if secondLanguage == api.Language_LANG_CHOOSE_AGAIN {
 		secondLanguage = slicedLangList[r.Intn(len(slicedLangList))]
 	}
 	npc.npcLang = append(npc.npcLang, secondLanguage)
@@ -218,7 +218,7 @@ var raceLangMap = map[api.RaceName]api.Language{
 	api.RaceName_RACE_ELF_DROW:          api.Language_LANG_ELVISH,
 	api.RaceName_RACE_HALFING_LIGHTFOOT: api.Language_LANG_HALFLING,
 	api.RaceName_RACE_HALFLING_STOUT:    api.Language_LANG_HALFLING,
-	api.RaceName_RACE_HUMAN:             api.Language_LANG_COMMON,
+	api.RaceName_RACE_HUMAN:             api.Language_LANG_CHOOSE_AGAIN,
 	api.RaceName_RACE_DRAGONBORN:        api.Language_LANG_DRACONIC,
 	api.RaceName_RACE_GNOME_FOREST:      api.Language_LANG_GNOMISH,
 	api.RaceName_RACE_GNOME_ROCK:        api.Language_LANG_GNOMISH,
